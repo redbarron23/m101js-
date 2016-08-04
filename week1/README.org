@@ -1,0 +1,155 @@
+bson specifications
+http://bsonspec.org
+
+* CRUD
+Create
+Read
+Update
+Delete
+
+
+* Create DB and Collection
+```
+> use video
+switched to db video
+> db.movies.insertOne({ "title": "Jaws", "year": 1975, "imdb": "tt0073195"})
+{
+    "acknowledged" : true,
+    "insertedId" : ObjectId("57a2692e934c5ebcc4083c85")
+}
+```
+
+** objectId generated randommaly if not specified
+it is a unique identifier
+
+** Adding two more docs
+```
+> db.movies.insertOne({ "title": "Mad Max 2: The Road Warrior", "year": 1981, "imdb": "tt0082694"})
+{
+    "acknowledged" : true,
+    "insertedId" : ObjectId("57a269e4934c5ebcc4083c86")
+}
+> db.movies.insertOne({ "title": "Raiders of the Lost Ark", "year": 1981, "imdb": "tt0082971"})
+{
+    "acknowledged" : true,
+    "insertedId" : ObjectId("57a26a0f934c5ebcc4083c87")
+}
+```
+
+* Finding Docs
+```
+> db.movies.find().pretty()
+{
+    "_id" : ObjectId("57a2692e934c5ebcc4083c85"),
+    "title" : "Jaws",
+    "year" : 1975,
+    "imdb" : "tt0073195"
+}
+{
+    "_id" : ObjectId("57a269e4934c5ebcc4083c86"),
+    "title" : "Mad Max 2: The Road Warrior",
+    "year" : 1981,
+    "imdb" : "tt0082694"
+}
+{
+    "_id" : ObjectId("57a26a0f934c5ebcc4083c87"),
+    "title" : "Raiders of the Lost Ark",
+    "year" : 1981,
+    "imdb" : "tt0082971"
+}
+>
+```
+
+* find docs with constraints
+
+** movies by title
+```
+> db.movies.find({ "title": "Jaws" }).pretty()
+{
+    "_id" : ObjectId("57a2692e934c5ebcc4083c85"),
+    "title" : "Jaws",
+    "year" : 1975,
+    "imdb" : "tt0073195"
+}
+```
+
+** only movies relased in 1981
+```
+> db.movies.find({ "year": 1981 }).pretty()
+{
+    "_id" : ObjectId("57a269e4934c5ebcc4083c86"),
+    "title" : "Mad Max 2: The Road Warrior",
+    "year" : 1981,
+    "imdb" : "tt0082694"
+}
+{
+    "_id" : ObjectId("57a26a0f934c5ebcc4083c87"),
+    "title" : "Raiders of the Lost Ark",
+    "year" : 1981,
+    "imdb" : "tt0082971"
+}
+```
+
+*** docs that are returned are not an array of docs but rather a cursor 
+
+*** this can be used in javascript
+```
+> var c = db.movides.find()
+> c.hasNext()
+false
+> var c = db.movies.find()
+> c.hasNext()
+true
+> c.next()
+{
+    "_id" : ObjectId("57a2692e934c5ebcc4083c85"),
+    "title" : "Jaws",
+    "year" : 1975,
+    "imdb" : "tt0073195"
+}
+> c.next()
+{
+    "_id" : ObjectId("57a269e4934c5ebcc4083c86"),
+    "title" : "Mad Max 2: The Road Warrior",
+    "year" : 1981,
+    "imdb" : "tt0082694"
+}
+> c.next()
+{
+    "_id" : ObjectId("57a26a0f934c5ebcc4083c87"),
+    "title" : "Raiders of the Lost Ark",
+    "year" : 1981,
+    "imdb" : "tt0082971"
+```
+
+*** exhausted all docs
+```
+> c.hasNext()
+false
+>
+```
+
+
+* Installing node
+```
+nvm use 4.4.7
+Now using node v4.4.7 (npm v2.15.8)
+nvm alias default 4.4.7
+default -> 4.4.7 (-> v4.4.7)
+```
+
+* Helloworld
+```
+console.log("Hello, World!");
+```
+
+* webserver
+```
+var http = require('http');
+var server = http.createServer(function (request, response) {
+    response.writeHead(200, {"Content-Type": text/plain"});
+});
+
+server.listen(8000);
+
+console.log("Server running at http://localhost:8000");
